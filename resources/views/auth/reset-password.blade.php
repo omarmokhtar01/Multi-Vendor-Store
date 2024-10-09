@@ -2,6 +2,9 @@
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 
+        {{-- اجباري مش نفسه الtoken تبع ال csrf --}}
+        {{-- لان المستخدم بيوصله زي link token code --}}
+        {{-- بيتم قراءتع وبيتحط هنا --}}
         <!-- Password Reset Token -->
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
 

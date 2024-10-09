@@ -98,6 +98,7 @@ class CategoriesController extends Controller
         $data['slug']=Str::slug($request->post('name'));
         $category = Category::create($data);
 
+
         return redirect()->route('categories.index')->with('success', 'Category created successfully');
     }
 
