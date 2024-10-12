@@ -30,6 +30,14 @@
                     @endauth
                 </div>
             @endif
+@if (Auth::check())
+<form method="POST" action="{{ route('logout') }}">
+    @csrf
+
+    <button>Logout</button>
+</form>
+@endif
+
 
             <div class="max-w-7xl mx-auto p-6 lg:p-8">
                 <div class="flex justify-center">
