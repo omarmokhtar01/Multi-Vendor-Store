@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group([
-    'middleware'=>['auth'],
-    'prefix'=>'dashboard',
+    'middleware'=>['auth:admin'],
+    'prefix'=>'admin/dashboard',
     // بتعوض ال names بتخليها تبدأ ب الي مكتوب جواها
     // 'as'=>'dashboard.',
 ],function(){

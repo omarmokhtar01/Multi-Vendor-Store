@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        // new guard
+        'admin'=>[
+            'driver' => 'session',
+            // ده مش اسم الجدول ده اسم ال provider
+            'provider' => 'admins',
+        ]
     ],
 
     /*
@@ -64,6 +70,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        // new provider
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+            ]
 
         // 'users' => [
         //     'driver' => 'database',
@@ -95,6 +106,14 @@ return [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
             'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_reset_tokens',
+            // 60m
+            'expire' => 60,
+            // فكل دقيقة request واحد
             'throttle' => 60,
         ],
     ],
