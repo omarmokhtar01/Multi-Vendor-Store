@@ -19,15 +19,6 @@
 
         </i>
     </button>
-
-    <button class="btn btn-danger m-4">
-
-            <a href="{{ route('categories.trash') }}" class="text-white">
-                Trash
-            </a>
-
-
-    </button>
 @endsection
 
 
@@ -61,7 +52,7 @@
                 <th>Description</th>
                 {{-- <th>Image</th> --}}
                 <th>Status</th>
-                <th>Created At</th>
+                <th>Deleted At</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -81,27 +72,21 @@
                     <td>{{ $category->description }}</td>
                     {{-- <td>{{ $category->image }}</td> --}}
                     <td>{{ $category->status }}</td>
-                    <td>{{ $category->created_at }}</td>
-                    <td>
-                        <a class="text-primary" href="{{ route('categories.show', $category->id) }}">
-                            <i class="fas fa-show"></i>
+                    <td>{{ $category->deleted_at }}</td>
 
-                            Show
-                        </a>
+                    <td>
+                        <form action="{{ route('categories.restore', $category->id) }}" method="post">
+                            @csrf
+                            @method('put')
+                            <button type="submit" class="btn btn-danger">Restore</button>
+                        </form>
                     </td>
                     <td>
-                        <a class="text-success" href="{{ route('categories.edit', $category->id) }}">
-                            <i class="fas fa-edit"></i>
-
-                            Edit
-                        </a>
-                    </td>
-                    <td>
-                        <form action="{{ route('categories.destroy', $category->id) }}" method="post">
+                        <form action="{{ route('categories.force-delete', $category->id) }}" method="post">
                             @csrf
                             <input type="hidden" name="_method" value="delete">
                             @method('delete')
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-danger">Force Delete</button>
                         </form>
                     </td>
                 </tr>

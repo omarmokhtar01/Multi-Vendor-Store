@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::create('subCategories', function (Blueprint $table) {
+        Schema::create('sub_categories', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('categories')->unsigned()->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('category_id')->unsigned()->nullable()->constrained()->onDelete('cascade');
 
     $table->string('name');
     $table->string('slug')->unique();

@@ -21,6 +21,9 @@ Route::group([
 // verified عشان تفحص الايميل ده متفعل ولا لا
 )->name('dashboard');
 
+Route::get('/categories/trash',[CategoriesController::class,'trash'])->name('categories.trash');;
+Route::put('/categories/{category}/restore',[CategoriesController::class,'restore'])->name('categories.restore');
+Route::delete('/categories/{category}/forceDelete', [CategoriesController::class, 'forceDelete'])->name('categories.force-delete');
 
 Route::resource('/categories',CategoriesController::class)
 // ->names([
@@ -33,4 +36,6 @@ Route::resource('/categories',CategoriesController::class)
 //     'destroy'=>'dashboard.categories.destroy'
 // ])
 ;
+
+
 });

@@ -19,21 +19,48 @@ class CategoriesController extends Controller
     //  Request بيتجاب من service container
     public function index()
     {
+
+
         $request = request();
-        $query =  Category::query();
-        if ($name = $request->query('name')) {
-            // $query->where('name', 'like', '%' . $name . '%');
-            $query->where('name', 'like', "%{$name}%");
-        }
-        if ($status = $request->query('status')) {
-            // $query->where('status', 'like', '=' . $status . '%');
-            $query->whereStatus( $status);
-        }
+        // $query =  Category::query();
+        // if ($name = $request->query('name')) {
+        //     // $query->where('name', 'like', '%' . $name . '%');
+        //     $query->where('name', 'like', "%{$name}%");
+        // }
+        // if ($status = $request->query('status')) {
+        //     // $query->where('status', 'like', '=' . $status . '%');
+        //     $query->whereStatus( $status);
+        // }
 
-        // $categories = Category::all();
+        // Scopes
+        // بطبق جمل معينه علي ال query builder تبع ال model
+        // اما شكل dynamic => global Scopes
+
+// انا كده طبقت ال Scope Eloquent local
+        // $categories = Category::active()->paginate(1);
+        // $categories = Category::status('archived')->paginate(1);
+
+
+        // $categories = $query->paginate(1);
+
+ // $categories = Category::all();
         // $categories = Category::paginate(1);
-        $categories = $query->paginate(1);
+        $categories = Category::filter($request->query())->
+        // built in func to sort by
+        // latest()->
+        // latest('name')->
 
+        // sort
+        // orderBy('name','ASC')->
+        // orderBy('name','DESC')->
+
+        // بترجع كمان البيانات المحذوفة
+        // withTrashed()->
+
+        // بترجع المحذوفة بس
+        // onlyTrashed()->
+
+        paginate(5);
 
         return view('dashboard/categories/index', compact('categories'));
     }
@@ -156,11 +183,11 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
         //
 
-        $category = Category::findOrFail($id);
+        // $category = Category::findOrFail($id);
         $category->delete();
 
         if ($category->image) {
@@ -177,5 +204,48 @@ class CategoriesController extends Controller
         }
         $path = $request->file('image')->store($fileName, ['disk' => 'uploads']);
         return $path;
+    }
+    public function trash(){
+        $request = request();
+
+        $categories = Category::filter($request->query())->
+        // built in func to sort by
+        // latest()->
+        // latest('name')->
+
+        // sort
+        // orderBy('name','ASC')->
+        // orderBy('name','DESC')->
+
+        // بترجع كمان البيانات المحذوفة
+        // withTrashed()->
+
+        // بترجع المحذوفة بس
+        onlyTrashed()->
+
+        paginate(5);
+
+        return view('dashboard/categories/trash', compact('categories'));
+    }
+    public function restore(Request $request, $id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Category restored!');
+    }
+
+    public function forceDelete($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->forceDelete();
+
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
+        }
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Category deleted forever!');
     }
 }
